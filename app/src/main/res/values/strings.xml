@@ -3,4 +3,11 @@
     <string name="action_settings">Settings</string>
     <string name="hint">Enter search query</string>
     <string name="search">Search</string>
+    <string name="filters_title">Search Filters</string>
+<!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="date_label">Begin Date:</string>
+    <string name="oldest">Oldest First</string>
+    <string name="newest">Newest First</string>
+    <string name="news_desk_value">News Desk Values:</string>
 </resources>

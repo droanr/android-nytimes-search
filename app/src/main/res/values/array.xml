@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="sort_options_array">
+        <item>@string/newest</item>
+        <item>@string/oldest</item>
+    </string-array>
+</resources>

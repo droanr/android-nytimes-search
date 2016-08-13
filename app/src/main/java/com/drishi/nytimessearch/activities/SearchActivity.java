@@ -2,6 +2,7 @@ package com.drishi.nytimessearch.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -13,6 +14,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.GridView;
 
+import com.drishi.nytimessearch.fragments.FiltersFragment;
 import com.drishi.nytimessearch.R;
 import com.drishi.nytimessearch.adapters.ArticleArrayAdapter;
 import com.drishi.nytimessearch.models.Article;
@@ -24,7 +26,9 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 import cz.msebera.android.httpclient.Header;
 
@@ -61,7 +65,7 @@ public class SearchActivity extends AppCompatActivity {
         gvResults.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                //create an internt to display the article
+                //create an intent to display the article
                 Intent intent = new Intent(getApplicationContext(), ArticleActivity.class);
                 //get the article to display
                 Article article = articles.get(i);
@@ -86,6 +90,7 @@ public class SearchActivity extends AppCompatActivity {
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
+
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
@@ -117,13 +122,18 @@ public class SearchActivity extends AppCompatActivity {
                 try {
                     articleJsonResults = response.getJSONObject("response").getJSONArray("docs");
                     adapter.addAll(Article.fromJsonArray(articleJsonResults));
-                    Log.d("DEBUG", articles.toString());
-
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
             }
         });
 
+    }
+
+    public void onSettingsClick(MenuItem item) {
+        FragmentManager fm = getSupportFragmentManager();
+        String defaultSort = getResources().getStringArray(R.array.sort_options_array)[0];
+        FiltersFragment filtersFragment = FiltersFragment.newInstance("Search Filters:", new SimpleDateFormat("MMMM/dd/yyyy").format(new Date()), defaultSort);
+        filtersFragment.show(fm, "fragment_filters");
     }
 }

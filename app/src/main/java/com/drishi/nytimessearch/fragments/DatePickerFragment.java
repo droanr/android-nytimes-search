@@ -11,7 +11,6 @@ import com.drishi.nytimessearch.R;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
 
 /**
  * Created by drishi on 8/12/16.
@@ -29,7 +28,7 @@ public class DatePickerFragment extends DialogFragment implements DatePickerDial
 
         DatePickerDialog.OnDateSetListener listener = (DatePickerDialog.OnDateSetListener) getActivity().getSupportFragmentManager().findFragmentById(R.id.fragFilters);
 
-        return new DatePickerDialog(getActivity(), listener, year, month, day);
+        return new DatePickerDialog(getActivity(), this, year, month, day);
     }
 
     public interface DatePickerDialogListener {
@@ -42,9 +41,12 @@ public class DatePickerFragment extends DialogFragment implements DatePickerDial
         listener.onFinishEditDialog(dateChosen);
     }
 
+    @Override
     public void onDateSet(DatePicker view, int year, int month, int day) {
         SimpleDateFormat fm = new SimpleDateFormat("MMMM/dd/yyyy");
-        dateChosen = fm.format(new Date(view.getMinDate()));
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(year, month, day);
+        dateChosen = fm.format(calendar.getTime());
         sendBackResult();
     }
 }
