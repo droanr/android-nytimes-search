@@ -131,7 +131,6 @@ public class SearchActivity extends AppCompatActivity implements FiltersFragment
             @Override
             public boolean onQueryTextSubmit(String query) {
                 // perform query here
-                showProgressBar();
                 AsyncHttpClient client = new AsyncHttpClient();
 
                 adapter.clear();
@@ -140,10 +139,9 @@ public class SearchActivity extends AppCompatActivity implements FiltersFragment
                 params.put("q", query);
                 boolean isConnected = checkConnection();
 
-                if (!isConnected) {
+                if (isConnected) {
                     client.get(URL, params, requestHandler);
                     searchView.clearFocus();
-                    hideProgressBar();
                 }
                 return true;
             }
@@ -208,8 +206,10 @@ public class SearchActivity extends AppCompatActivity implements FiltersFragment
         public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
             JSONArray articleJsonResults = null;
             try {
+                showProgressBar();
                 articleJsonResults = response.getJSONObject("response").getJSONArray("docs");
                 adapter.addAll(Article.fromJsonArray(articleJsonResults));
+                hideProgressBar();
             } catch (JSONException e) {
                 e.printStackTrace();
             }

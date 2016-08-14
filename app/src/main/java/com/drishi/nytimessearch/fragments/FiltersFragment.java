@@ -95,7 +95,7 @@ public class FiltersFragment extends DialogFragment implements DatePickerFragmen
         adapter = new ArrayAdapter<>(getActivity(), R.layout.spinner_item, getResources().getStringArray(R.array.sort_options_array));
 
         spSortOrder.setAdapter(adapter);
-        startingSortOrder = adapter.getPosition(sort);
+        spSortOrder.setSelection(Arrays.asList(getResources().getStringArray(R.array.sort_options_array)).indexOf(sort));
     }
 
     public void setUpViews(View view) {
