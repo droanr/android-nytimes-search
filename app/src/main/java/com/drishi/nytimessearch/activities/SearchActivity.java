@@ -1,12 +1,17 @@
 package com.drishi.nytimessearch.activities;
 
+import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.MenuItemCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -27,6 +32,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -58,6 +64,24 @@ public class SearchActivity extends AppCompatActivity implements FiltersFragment
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         setupViews();
+    }
+
+    private Boolean isNetworkAvailable() {
+        ConnectivityManager connectivityManager
+                = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+        return activeNetworkInfo != null && activeNetworkInfo.isConnectedOrConnecting();
+    }
+
+    public boolean isOnline() {
+        Runtime runtime = Runtime.getRuntime();
+        try {
+            Process ipProcess = runtime.exec("/system/bin/ping -c 1 8.8.8.8");
+            int     exitValue = ipProcess.waitFor();
+            return (exitValue == 0);
+        } catch (IOException e)          { e.printStackTrace(); }
+        catch (InterruptedException e) { e.printStackTrace(); }
+        return false;
     }
 
     public void setupViews() {
@@ -114,10 +138,13 @@ public class SearchActivity extends AppCompatActivity implements FiltersFragment
                 RequestParams params = getParams();
                 params.put("page", 0);
                 params.put("q", query);
+                boolean isConnected = checkConnection();
 
-                client.get(URL, params, requestHandler);
-                searchView.clearFocus();
-                hideProgressBar();
+                if (!isConnected) {
+                    client.get(URL, params, requestHandler);
+                    searchView.clearFocus();
+                    hideProgressBar();
+                }
                 return true;
             }
 
@@ -168,9 +195,12 @@ public class SearchActivity extends AppCompatActivity implements FiltersFragment
         AsyncHttpClient client = new AsyncHttpClient();
         RequestParams params = getParams();
         adapter.clear();
-        client.get(URL, params, requestHandler);
-        Toast.makeText(this, "Filters saved and applied to search", Toast.LENGTH_SHORT).show();
+        boolean isConnected = checkConnection();
 
+        if (isConnected) {
+            client.get(URL, params, requestHandler);
+            Toast.makeText(this, "Filters saved and applied to search", Toast.LENGTH_SHORT).show();
+        }
     }
 
     public JsonHttpResponseHandler requestHandler = new JsonHttpResponseHandler() {
@@ -229,5 +259,25 @@ public class SearchActivity extends AppCompatActivity implements FiltersFragment
     public void hideProgressBar() {
         // Hide progress item
         menuItemProgress.setVisible(false);
+    }
+
+    public boolean checkConnection() {
+        if (!isNetworkAvailable() || !isOnline()) {
+            try {
+                AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
+
+                alertDialog.setTitle("No Connection");
+                alertDialog.setMessage("Internet not available. Check your internet connectivity and try again");
+                alertDialog.setIcon(android.R.drawable.ic_dialog_alert);
+                alertDialog.setNegativeButton("OK", null);
+                alertDialog.show();
+            }
+            catch(Exception e)
+            {
+                Log.d("DEBUG", "Show Dialog: "+e.getMessage());
+            }
+            return false;
+        }
+        return true;
     }
 }

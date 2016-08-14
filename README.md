@@ -13,7 +13,7 @@ Project 3 for the Android CodePath project at Hearsay Social - Article search Ap
 - [ ] User can scroll down "infinitely" to continue loading more news articles. The maximum number of articles is limited by the API search. (1 point)
 
 Extras:
-- [ ] Robust error handling, check if internet is available, handle error cases, network failures. (1 point)
+- [x] Robust error handling, check if internet is available, handle error cases, network failures. (1 point)
 - [x] Use the ActionBar SearchView or custom layout as the query box instead of an EditText. (1 point)
 - [ ] User can share a link to their friends or email it to themselves. (1 point)
 - [x] Replace Filter Settings Activity with a lightweight modal overlay. (2 points)
