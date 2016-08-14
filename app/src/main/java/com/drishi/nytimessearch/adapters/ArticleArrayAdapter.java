@@ -21,40 +21,52 @@ import java.util.List;
 public class ArticleArrayAdapter extends ArrayAdapter<Article> {
 
     public ArticleArrayAdapter(Context context, List<Article> articles) {
-        super(context, android.R.layout.simple_list_item_1, articles);
+        super(context, R.layout.item_article_result, articles);
+    }
 
+    public class ViewHolder {
+        TextView tvTitle;
+        ImageView ivImage;
+
+        public ViewHolder(View view) {
+            tvTitle = (TextView) view.findViewById(R.id.tvTitle);
+            ivImage = (ImageView) view.findViewById(R.id.ivImage);
+
+        }
     }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
+        ViewHolder viewHolder;
+
         // get the data item for position
-        Article article = this.getItem(position);
+        Article article = (Article) getItem(position);
 
         // check to see if existing view is being reused
         // not using a recycled view -> inflate the layout
         if (convertView == null) {
             LayoutInflater inflater = LayoutInflater.from(getContext());
             convertView = inflater.inflate(R.layout.item_article_result, parent, false);
+            viewHolder = new ViewHolder(convertView);
+            convertView.setTag(viewHolder);
+        } else {
+            viewHolder = (ViewHolder) convertView.getTag();
         }
-        //find the image
-        ImageView imageView = (ImageView) convertView.findViewById(R.id.ivImage);
 
         //clear out recycled image from ConvertView from last time
-        imageView.setImageResource(0);
+        viewHolder.ivImage.setImageResource(0);
 
-        TextView tvTitle = (TextView) convertView.findViewById(R.id.tvTitle);
-
-        tvTitle.setText(article.getHeadline());
+        viewHolder.tvTitle.setText(article.getHeadline());
 
         // populate the thumbnail
         // remotely download the image in the background
-
         String thumbnail = article.getThumbNail();
 
         if (!TextUtils.isEmpty(thumbnail)) {
-            Picasso.with(getContext()).load(thumbnail).into(imageView);
+            Picasso.with(getContext()).load(thumbnail).into(viewHolder.ivImage);
         }
 
         return convertView;
     }
+
 }
