@@ -3,15 +3,17 @@ package com.drishi.nytimessearch.activities;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.GridView;
+import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import com.drishi.nytimessearch.R;
 import com.drishi.nytimessearch.adapters.ArticleArrayAdapter;
@@ -33,9 +35,7 @@ import cz.msebera.android.httpclient.Header;
 
 public class SearchActivity extends AppCompatActivity implements FiltersFragment.FiltersFragmentListener{
 
-    EditText etQuery;
     GridView gvResults;
-    Button btnSearch;
 
     ArrayList<Article> articles;
     ArticleArrayAdapter adapter;
@@ -44,6 +44,10 @@ public class SearchActivity extends AppCompatActivity implements FiltersFragment
     Date beginDateVal;
     String sortVal;
     ArrayList<String> filtersVal;
+
+    // Menu item for progress bar
+    MenuItem menuItemProgress;
+    MenuItem menuItemFilters;
 
     private static final String API_KEY = "8ebaee6e9c2b4a85b486229445f73d5b";
     private static final String URL = "https://api.nytimes.com/svc/search/v2/articlesearch.json";
@@ -54,19 +58,15 @@ public class SearchActivity extends AppCompatActivity implements FiltersFragment
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         setupViews();
-
-
     }
 
     public void setupViews() {
-        etQuery = (EditText) findViewById(R.id.etQuery);
         gvResults = (GridView) findViewById(R.id.gvResults);
-        btnSearch = (Button) findViewById(R.id.btnSearch);
         articles = new ArrayList<>();
         adapter = new ArticleArrayAdapter(this, articles);
         gvResults.setAdapter(adapter);
 
-        // initialize values for fitler
+        // initialize values for filter
         sortVal = "Oldest First";
         filtersVal = new ArrayList<>();
 
@@ -86,9 +86,47 @@ public class SearchActivity extends AppCompatActivity implements FiltersFragment
     }
 
     @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        // Store instance of the menu item containing progress
+        menuItemProgress = menu.findItem(R.id.miActionProgress);
+        menuItemFilters = menu.findItem(R.id.action_settings);
+
+        // Extract the action-view from the menu item
+        ProgressBar v =  (ProgressBar) MenuItemCompat.getActionView(menuItemProgress);
+        // Return to finish
+        return super.onPrepareOptionsMenu(menu);
+    }
+
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_search, menu);
+        MenuItem searchItem = menu.findItem(R.id.action_search);
+        final SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                // perform query here
+                showProgressBar();
+                AsyncHttpClient client = new AsyncHttpClient();
+
+                adapter.clear();
+                RequestParams params = getParams();
+                params.put("page", 0);
+                params.put("q", query);
+
+                client.get(URL, params, requestHandler);
+                searchView.clearFocus();
+                hideProgressBar();
+                return true;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                return false;
+            }
+        });
+
         return true;
     }
 
@@ -106,21 +144,6 @@ public class SearchActivity extends AppCompatActivity implements FiltersFragment
         }
 
         return super.onOptionsItemSelected(item);
-    }
-
-    public void onArticleSearch(View view) {
-        String query = etQuery.getText().toString();
-
-        //Toast.makeText(this, "Searching for " + query, Toast.LENGTH_SHORT).show();
-        AsyncHttpClient client = new AsyncHttpClient();
-
-        adapter.clear();
-        RequestParams params = getParams();
-        params.put("page", 0);
-        params.put("q", query);
-
-        client.get(URL, params, requestHandler);
-
     }
 
     public void onSettingsClick(MenuItem item) {
@@ -146,6 +169,8 @@ public class SearchActivity extends AppCompatActivity implements FiltersFragment
         RequestParams params = getParams();
         adapter.clear();
         client.get(URL, params, requestHandler);
+        Toast.makeText(this, "Filters saved and applied to search", Toast.LENGTH_SHORT).show();
+
     }
 
     public JsonHttpResponseHandler requestHandler = new JsonHttpResponseHandler() {
@@ -194,5 +219,15 @@ public class SearchActivity extends AppCompatActivity implements FiltersFragment
             default:
                 return "oldest";
         }
+    }
+
+    public void showProgressBar() {
+        // Show progress item
+        menuItemProgress.setVisible(true);
+    }
+
+    public void hideProgressBar() {
+        // Hide progress item
+        menuItemProgress.setVisible(false);
     }
 }
