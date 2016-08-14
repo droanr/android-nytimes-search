@@ -1,16 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="wrap_content" android:layout_height="wrap_content"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:minHeight="260dp"
+    android:minWidth="200dp"
     android:layout_gravity="center"
-    android:padding="10dp"
+    android:padding="15dp"
     android:id="@+id/fragFilters">
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceSmall"
         android:text="@string/date_label"
+        android:textSize="12sp"
         android:id="@+id/tvDateLabel"
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
@@ -20,24 +23,26 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:textSize="12sp"
+        android:paddingLeft="5dp"
+        android:layout_marginLeft="40dp"
         tools:text="11/08/2016"
-        android:textColor="@android:color/black"
+        android:textColor="@color/colorPrimaryDark"
         android:id="@+id/tvBeginDate"
-        android:layout_alignBottom="@+id/tvDateLabel"
-        android:layout_alignRight="@+id/spSortOrder"
-        android:layout_alignEnd="@+id/spSortOrder" />
+        android:layout_alignTop="@+id/tvDateLabel"
+        android:layout_toRightOf="@+id/tvDateLabel" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceSmall"
-        android:text="Sort Order:"
+        android:textSize="12sp"
+        tools:text="Sort Order:"
         android:id="@+id/tvSortLabel"
         android:layout_below="@+id/tvDateLabel"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_marginBottom="20dp"/>
+        android:layout_marginBottom="20dp"
+        android:text="@string/sort_label" />
 
     <Spinner
         android:layout_width="wrap_content"
@@ -45,17 +50,68 @@
         android:id="@+id/spSortOrder"
         android:entries="@array/sort_options_array"
         android:layout_alignTop="@+id/tvSortLabel"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        android:layout_marginBottom="20dp"/>
+        android:layout_alignLeft="@+id/tvBeginDate" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:textSize="12sp"
         android:text="@string/news_desk_value"
         android:id="@+id/tvNewsDeskLabel"
-        android:layout_below="@+id/tvSortLabel"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/tvSortLabel"
+        android:layout_alignRight="@+id/tvDateLabel"
+        android:layout_alignEnd="@+id/tvDateLabel" />
+
+    <CheckBox
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/arts_label"
+        android:textSize="12sp"
+        android:textColor="@color/colorPrimaryDark"
+        android:id="@+id/cbArts"
+        android:checked="false"
+        android:layout_below="@+id/tvSortLabel"
+        android:layout_toRightOf="@+id/tvNewsDeskLabel"
+        android:layout_alignLeft="@+id/spSortOrder"/>
+
+    <CheckBox
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/fashion_label"
+        android:textSize="12sp"
+        android:textColor="@color/colorPrimaryDark"
+        android:id="@+id/cbFashion"
+        android:checked="false"
+        android:layout_below="@+id/cbArts"
+        android:layout_toRightOf="@+id/tvNewsDeskLabel"
+        android:layout_alignLeft="@+id/cbArts"/>
+
+    <CheckBox
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/sports_label"
+        android:textSize="12sp"
+        android:textColor="@color/colorPrimaryDark"
+        android:id="@+id/cbSports"
+        android:checked="false"
+        android:layout_below="@+id/cbFashion"
+        android:layout_alignLeft="@+id/cbFashion"
+        android:layout_alignStart="@+id/cbFashion" />
+
+    <Button
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/save_label"
+        android:textSize="12sp"
+        android:textStyle="normal"
+        android:textColor="@android:color/white"
+        android:background="@color/colorPrimary"
+        android:id="@+id/btnSaveFilters"
+        android:layout_marginTop="20dp"
+        android:layout_below="@+id/cbSports"
+        android:layout_centerHorizontal="true" />
+
 </RelativeLayout>

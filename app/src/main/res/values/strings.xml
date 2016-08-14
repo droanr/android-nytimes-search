@@ -10,4 +10,9 @@
     <string name="oldest">Oldest First</string>
     <string name="newest">Newest First</string>
     <string name="news_desk_value">News Desk Values:</string>
+    <string name="arts_label">Arts</string>
+    <string name="fashion_label"><![CDATA[Fashion & Style]]></string>
+    <string name="sort_label">Sort Order:</string>
+    <string name="sports_label">Sports</string>
+    <string name="save_label">Save</string>
 </resources>

@@ -11,12 +11,13 @@ import com.drishi.nytimessearch.R;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 
 /**
  * Created by drishi on 8/12/16.
  */
 public class DatePickerFragment extends DialogFragment implements DatePickerDialog.OnDateSetListener {
-    String dateChosen;
+    Date dateChosen;
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -32,21 +33,21 @@ public class DatePickerFragment extends DialogFragment implements DatePickerDial
     }
 
     public interface DatePickerDialogListener {
-        void onFinishEditDialog(String inputDate);
+        void onFinishEditDate(Date inputDate);
     }
 
     public void sendBackResult() {
         FragmentManager fm = getFragmentManager();
         DatePickerDialogListener listener = (DatePickerDialogListener) getTargetFragment();
-        listener.onFinishEditDialog(dateChosen);
+        listener.onFinishEditDate(dateChosen);
     }
 
     @Override
     public void onDateSet(DatePicker view, int year, int month, int day) {
-        SimpleDateFormat fm = new SimpleDateFormat("MMMM/dd/yyyy");
+        SimpleDateFormat fm = new SimpleDateFormat("MMMM dd, yyyy");
         Calendar calendar = Calendar.getInstance();
         calendar.set(year, month, day);
-        dateChosen = fm.format(calendar.getTime());
+        dateChosen = calendar.getTime();
         sendBackResult();
     }
 }
