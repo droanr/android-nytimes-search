@@ -30,3 +30,6 @@ Extras:
 - [ ] Stretch: Switch to using retrolambda expressions to cleanup event handling blocks. (1 point)
 - [ ] Stretch: Leverage the popular GSON library to streamline the parsing of JSON data. (1 point)
 - [ ] Stretch: Consume the New York Times API using the popular Retrofit networking library instead of Android Async HTTP. (3 points)
+
+GIF:
+![alt tag](https://raw.githubusercontent.com/droanr/android-nytimes-search/master/nytimessearch.gif)
