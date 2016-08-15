@@ -1,8 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+<android.support.v7.widget.CardView
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    card_view:cardBackgroundColor="#20E6E6E6"
+    card_view:cardCornerRadius="4dp"
+    card_view:cardElevation="2dp"
+    android:layout_marginBottom="10dp"
+    android:layout_marginLeft="3dp">
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="100dp"
     android:layout_height="110dp"
-    android:padding="5dp"
     android:background="?android:attr/selectableItemBackground">
 
     <ImageView
@@ -10,6 +20,7 @@
         android:layout_height="75dp"
         android:id="@+id/ivImage"
         android:scaleType="center"
+        android:layout_gravity="center"
         android:src="@mipmap/ic_launcher"
         />
 
@@ -18,7 +29,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="TextView"
-        android:textSize="10sp"
+        android:textSize="12sp"
+        android:gravity="center"
+        android:textStyle="italic"
+        android:textColor="@android:color/holo_red_dark"
+        android:layout_gravity="center"
         android:maxLines="2"
         android:ellipsize="end"/>
 </LinearLayout>
+</android.support.v7.widget.CardView>

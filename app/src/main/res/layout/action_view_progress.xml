@@ -5,4 +5,5 @@
     android:layout_height="wrap_content"
     android:id="@+id/pbProgressAction"
     android:indeterminate="true"
-    android:layout_centerInParent="true"/>
+    android:layout_centerInParent="true"
+    />

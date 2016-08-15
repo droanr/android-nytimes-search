@@ -1,6 +1,7 @@
 package com.drishi.nytimessearch.activities;
 
 import android.content.Context;
+import android.graphics.drawable.ColorDrawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
@@ -63,6 +64,7 @@ public class SearchActivity extends AppCompatActivity implements FiltersFragment
         setContentView(R.layout.activity_search);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        toolbar.setBackground(new ColorDrawable(getResources().getColor(android.R.color.holo_red_dark)));
         setupViews();
     }
 

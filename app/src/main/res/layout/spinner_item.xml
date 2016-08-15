@@ -8,4 +8,5 @@
     android:paddingRight="10dp"
     android:paddingBottom="10dp"
     android:paddingLeft="5dp"
-    android:textColor="@color/colorPrimaryDark" />
+    android:textColor="@android:color/holo_red_dark"
+    />
