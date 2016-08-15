@@ -1,7 +1,6 @@
 package com.drishi.nytimessearch.activities;
 
 import android.content.Context;
-import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
@@ -9,20 +8,20 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
+import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.AdapterView;
-import android.widget.GridView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.drishi.nytimessearch.R;
-import com.drishi.nytimessearch.adapters.ArticleArrayAdapter;
+import com.drishi.nytimessearch.adapters.ArticleAdapter;
 import com.drishi.nytimessearch.fragments.FiltersFragment;
+import com.drishi.nytimessearch.interfaces.EndlessRecyclerViewScrollListener;
 import com.drishi.nytimessearch.models.Article;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.JsonHttpResponseHandler;
@@ -41,10 +40,10 @@ import cz.msebera.android.httpclient.Header;
 
 public class SearchActivity extends AppCompatActivity implements FiltersFragment.FiltersFragmentListener{
 
-    GridView gvResults;
+    RecyclerView rvResults;
 
     ArrayList<Article> articles;
-    ArticleArrayAdapter adapter;
+    ArticleAdapter adapter;
 
     // filter values
     Date beginDateVal;
@@ -85,26 +84,24 @@ public class SearchActivity extends AppCompatActivity implements FiltersFragment
     }
 
     public void setupViews() {
-        gvResults = (GridView) findViewById(R.id.gvResults);
+        rvResults = (RecyclerView) findViewById(R.id.rvResults);
         articles = new ArrayList<>();
-        adapter = new ArticleArrayAdapter(this, articles);
-        gvResults.setAdapter(adapter);
-
+        adapter = new ArticleAdapter(this, articles);
+        rvResults.setAdapter(adapter);
+        rvResults.setLayoutManager(new StaggeredGridLayoutManager(3, StaggeredGridLayoutManager.VERTICAL));
         // initialize values for filter
         sortVal = "Oldest First";
         filtersVal = new ArrayList<>();
-
-        gvResults.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        rvResults.addOnScrollListener(new EndlessRecyclerViewScrollListener((StaggeredGridLayoutManager) rvResults.getLayoutManager()) {
             @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                //create an intent to display the article
-                Intent intent = new Intent(getApplicationContext(), ArticleActivity.class);
-                //get the article to display
-                Article article = articles.get(i);
+            public void onLoadMore(int page, int totalItemsCount) {
+                AsyncHttpClient client = new AsyncHttpClient();
 
-                intent.putExtra("article", article);
-                //pass in that activity into intent
-                startActivity(intent);
+                RequestParams params = getParams(page);
+
+                if (checkConnection()) {
+                    client.get(URL, params, requestHandler);
+                }
             }
         });
     }
@@ -133,13 +130,12 @@ public class SearchActivity extends AppCompatActivity implements FiltersFragment
                 // perform query here
                 AsyncHttpClient client = new AsyncHttpClient();
 
-                adapter.clear();
-                RequestParams params = getParams();
-                params.put("page", 0);
+                RequestParams params = getParams(0);
                 params.put("q", query);
                 boolean isConnected = checkConnection();
 
                 if (isConnected) {
+                    articles.clear();
                     client.get(URL, params, requestHandler);
                     searchView.clearFocus();
                 }
@@ -191,11 +187,11 @@ public class SearchActivity extends AppCompatActivity implements FiltersFragment
         beginDateVal = date;
 
         AsyncHttpClient client = new AsyncHttpClient();
-        RequestParams params = getParams();
-        adapter.clear();
+        RequestParams params = getParams(0);
         boolean isConnected = checkConnection();
 
         if (isConnected) {
+            articles.clear();
             client.get(URL, params, requestHandler);
             Toast.makeText(this, "Filters saved and applied to search", Toast.LENGTH_SHORT).show();
         }
@@ -208,7 +204,8 @@ public class SearchActivity extends AppCompatActivity implements FiltersFragment
             try {
                 showProgressBar();
                 articleJsonResults = response.getJSONObject("response").getJSONArray("docs");
-                adapter.addAll(Article.fromJsonArray(articleJsonResults));
+                articles.addAll(Article.fromJsonArray(articleJsonResults));
+                adapter.notifyDataSetChanged();
                 hideProgressBar();
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -216,7 +213,7 @@ public class SearchActivity extends AppCompatActivity implements FiltersFragment
         }
     };
 
-    public RequestParams getParams() {
+    public RequestParams getParams(int page) {
         RequestParams params = new RequestParams();
         params.put("api-key", API_KEY);
         if (beginDateVal != null) {
@@ -224,13 +221,15 @@ public class SearchActivity extends AppCompatActivity implements FiltersFragment
             params.put("end_date", new SimpleDateFormat("yyyyMMdd").format(new Date()));
         }
 
+        params.put("page", page);
+
         if (sortVal.length() != 0) {
             params.put("sort", resolveSortOrder(sortVal));
         }
 
         String filtersString = "";
-        for (String fitler: filtersVal) {
-            filtersString += "\"" + fitler + "\" ";
+        for (String filter: filtersVal) {
+            filtersString += "\"" + filter + "\" ";
         }
 
         if (filtersString.length() != 0) {

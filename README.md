@@ -10,7 +10,7 @@ Project 3 for the Android CodePath project at Hearsay Social - Article search Ap
     - News desk values (Arts, Fashion & Style, Sports) using checkboxes
 - [x] Subsequent searches will have any filters applied to the search results. (1 point)
 - [x] User can tap on any article in results to view the contents in an embedded browser. (2 points)
-- [ ] User can scroll down "infinitely" to continue loading more news articles. The maximum number of articles is limited by the API search. (1 point)
+- [x] User can scroll down "infinitely" to continue loading more news articles. The maximum number of articles is limited by the API search. (1 point)
 
 Extras:
 - [x] Robust error handling, check if internet is available, handle error cases, network failures. (1 point)
@@ -18,7 +18,7 @@ Extras:
 - [ ] User can share a link to their friends or email it to themselves. (1 point)
 - [x] Replace Filter Settings Activity with a lightweight modal overlay. (2 points)
 - [ ] Improve the user interface and experiment with image assets and/or styling and coloring (1 to 3 points depending on the difficulty of UI improvements)
-- [ ] Stretch: Use the RecyclerView with the StaggeredGridLayoutManager to display improve the grid of image results (see Picasso guide too). (2 points)
+- [x] Stretch: Use the RecyclerView with the StaggeredGridLayoutManager to display improve the grid of image results (see Picasso guide too). (2 points)
 - [ ] Stretch: For different news articles that only have text or have text with thumbnails, use Heterogenous Layouts with RecyclerView. (2 points)
 - [ ] Stretch: Apply the popular ButterKnife annotation library to reduce view boilerplate. (1 point)
 - [ ] Stretch: Use Parcelable instead of Serializable using the popular Parceler library. (1 point)
