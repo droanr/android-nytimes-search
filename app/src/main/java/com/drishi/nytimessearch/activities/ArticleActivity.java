@@ -8,6 +8,8 @@ import android.webkit.WebViewClient;
 import com.drishi.nytimessearch.R;
 import com.drishi.nytimessearch.models.Article;
 
+import org.parceler.Parcels;
+
 public class ArticleActivity extends AppCompatActivity {
 
     @Override
@@ -15,7 +17,7 @@ public class ArticleActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_article);
 
-        final Article article = (Article) getIntent().getSerializableExtra("article");
+        final Article article = (Article) Parcels.unwrap(getIntent().getParcelableExtra("article"));
 
         WebView webView = (WebView) findViewById(R.id.wvArticle);
 

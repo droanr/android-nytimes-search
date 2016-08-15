@@ -15,6 +15,8 @@ import com.drishi.nytimessearch.activities.ArticleActivity;
 import com.drishi.nytimessearch.models.Article;
 import com.squareup.picasso.Picasso;
 
+import org.parceler.Parcels;
+
 import java.util.List;
 
 /**
@@ -82,7 +84,7 @@ public class ArticleAdapter extends RecyclerView.Adapter<ArticleAdapter.ViewHold
             int position = getLayoutPosition();
             Article article = mArticles.get(position);
 
-            intent.putExtra("article", article);
+            intent.putExtra("article", Parcels.wrap(article));
             //pass in that activity into intent
             getContext().startActivity(intent);
         }

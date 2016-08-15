@@ -21,7 +21,7 @@ Extras:
 - [x] Stretch: Use the RecyclerView with the StaggeredGridLayoutManager to display improve the grid of image results (see Picasso guide too). (2 points)
 - [ ] Stretch: For different news articles that only have text or have text with thumbnails, use Heterogenous Layouts with RecyclerView. (2 points)
 - [ ] Stretch: Apply the popular ButterKnife annotation library to reduce view boilerplate. (1 point)
-- [ ] Stretch: Use Parcelable instead of Serializable using the popular Parceler library. (1 point)
+- [x] Stretch: Use Parcelable instead of Serializable using the popular Parceler library. (1 point)
 - [ ] Stretch: Replace all icon drawables and other static image assets with vector drawables where appropriate. (1 point)
 - [ ] Stretch: Leverage the data binding support module to bind data into one or more activity layout templates. (1 point)
 - [ ] Stretch: Replace Picasso with Glide for more efficient image rendering. (1 point)
