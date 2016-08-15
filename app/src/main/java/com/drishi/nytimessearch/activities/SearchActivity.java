@@ -142,6 +142,7 @@ public class SearchActivity extends AppCompatActivity implements FiltersFragment
 
                 if (isConnected) {
                     articles.clear();
+                    adapter.notifyDataSetChanged();
                     client.get(URL, params, requestHandler);
                     searchView.clearFocus();
                 }
@@ -202,6 +203,7 @@ public class SearchActivity extends AppCompatActivity implements FiltersFragment
 
         if (isConnected) {
             articles.clear();
+            adapter.notifyDataSetChanged();
             client.get(URL, params, requestHandler);
             Toast.makeText(this, "Filters saved and applied to search", Toast.LENGTH_SHORT).show();
         }

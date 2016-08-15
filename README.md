@@ -1,6 +1,8 @@
 # android-nytimes-search
 Project 3 for the Android CodePath project at Hearsay Social - Article search App utilizing NY Times API
 
+Time Spent in total: 17 Hours
+
 - [x] User can enter a search query that will display a grid of news articles using the thumbnail and headline from the New York Times Search API. (3 points)
 - [x] User can click on "filter" icon which allows selection of advanced search options to filter articles. (3 points)
     An example of a query with filters (begin_date, sort, and news_desk) applied can be found here. Full details of the API can be found on this article search README.
