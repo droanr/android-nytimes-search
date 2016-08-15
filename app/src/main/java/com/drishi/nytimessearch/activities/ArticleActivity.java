@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.ShareActionProvider;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.webkit.WebResourceRequest;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
@@ -16,7 +17,7 @@ import com.drishi.nytimessearch.models.Article;
 import org.parceler.Parcels;
 
 public class ArticleActivity extends AppCompatActivity {
-
+    private WebView webView;
     private ShareActionProvider miShareAction;
     private Intent shareIntent;
     private Article article;
@@ -28,14 +29,17 @@ public class ArticleActivity extends AppCompatActivity {
 
         article = (Article) Parcels.unwrap(getIntent().getParcelableExtra("article"));
 
-        WebView webView = (WebView) findViewById(R.id.wvArticle);
-
+        webView = (WebView) findViewById(R.id.wvArticle);
+        webView.getSettings().setJavaScriptEnabled(true);
+        webView.getSettings().setLoadWithOverviewMode(true);
+        webView.getSettings().setUseWideViewPort(true);
         webView.setWebViewClient(new WebViewClient(){
             @Override
-            public boolean shouldOverrideUrlLoading(WebView view, String url) {
-                view.loadUrl(article.getWebUrl());
+            public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
+                view.loadUrl(request.getUrl().toString());
                 return true;
             }
+
         });
         webView.loadUrl(article.getWebUrl());
         prepareShareIntent();
