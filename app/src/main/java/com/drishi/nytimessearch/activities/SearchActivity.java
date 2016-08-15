@@ -56,6 +56,8 @@ public class SearchActivity extends AppCompatActivity implements FiltersFragment
     MenuItem menuItemProgress;
     MenuItem menuItemFilters;
 
+    SearchView searchView;
+
     private static final String API_KEY = "8ebaee6e9c2b4a85b486229445f73d5b";
     private static final String URL = "https://api.nytimes.com/svc/search/v2/articlesearch.json";
     @Override
@@ -127,7 +129,7 @@ public class SearchActivity extends AppCompatActivity implements FiltersFragment
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_search, menu);
         MenuItem searchItem = menu.findItem(R.id.action_search);
-        final SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
+        searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
@@ -192,6 +194,10 @@ public class SearchActivity extends AppCompatActivity implements FiltersFragment
 
         AsyncHttpClient client = new AsyncHttpClient();
         RequestParams params = getParams(0);
+        String query = searchView.getQuery().toString().trim();
+        if (query.length() != 0) {
+            params.put("q", searchView.getQuery().toString());
+        }
         boolean isConnected = checkConnection();
 
         if (isConnected) {
