@@ -15,7 +15,7 @@ Project 3 for the Android CodePath project at Hearsay Social - Article search Ap
 Extras:
 - [x] Robust error handling, check if internet is available, handle error cases, network failures. (1 point)
 - [x] Use the ActionBar SearchView or custom layout as the query box instead of an EditText. (1 point)
-- [ ] User can share a link to their friends or email it to themselves. (1 point)
+- [x] User can share a link to their friends or email it to themselves. (1 point)
 - [x] Replace Filter Settings Activity with a lightweight modal overlay. (2 points)
 - [ ] Improve the user interface and experiment with image assets and/or styling and coloring (1 to 3 points depending on the difficulty of UI improvements)
 - [x] Stretch: Use the RecyclerView with the StaggeredGridLayoutManager to display improve the grid of image results (see Picasso guide too). (2 points)
