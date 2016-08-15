@@ -37,6 +37,7 @@ import java.util.ArrayList;
 import java.util.Date;
 
 import cz.msebera.android.httpclient.Header;
+import jp.wasabeef.recyclerview.animators.SlideInUpAnimator;
 
 public class SearchActivity extends AppCompatActivity implements FiltersFragment.FiltersFragmentListener{
 
@@ -88,6 +89,7 @@ public class SearchActivity extends AppCompatActivity implements FiltersFragment
         articles = new ArrayList<>();
         adapter = new ArticleAdapter(this, articles);
         rvResults.setAdapter(adapter);
+        rvResults.setItemAnimator(new SlideInUpAnimator());
         rvResults.setLayoutManager(new StaggeredGridLayoutManager(3, StaggeredGridLayoutManager.VERTICAL));
         // initialize values for filter
         sortVal = "Oldest First";
